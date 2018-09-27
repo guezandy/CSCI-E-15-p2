@@ -47,9 +47,9 @@ foreach ($validators as $field => $criteria) {
 }
 
 # Other validators not defined in Form
-$hours = (float) $form->get('hours');
-$minutes = (float) $form->get('minutes');
-$distance = (float) $form->get('distance');
+$hours = (float)$form->get('hours');
+$minutes = (float)$form->get('minutes');
+$distance = (float)$form->get('distance');
 $unit = $form->get('unit');
 
 # Either minutes or hours must contain a value
@@ -93,7 +93,7 @@ if (empty($errors)) {
         $hour_pluralize = $hours_per_distance == 1 ? 'hour' : 'hours';
         $result_string = $result_string . $hours_per_distance . ' ' . $hour_pluralize;
     }
-    if($minutes_per_distance > 0) {
+    if ($minutes_per_distance > 0) {
         $minutes_pluralize = $minutes_per_distance == 1 ? 'minute' : 'minutes';
         $result_string = $result_string . ' ' . $minutes_per_distance . ' ' . $minutes_pluralize;
     }

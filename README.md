@@ -15,5 +15,5 @@
 ## 3 Unique inputs
 1. Text input for distance running
 2. Number input for goal hours
-3. Dropdown goal minutes
+3. Dropdown for goal minutes
 4. Radio buttons selecting kilometer or mile
