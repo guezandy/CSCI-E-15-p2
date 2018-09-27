@@ -20,9 +20,9 @@ if (isset($_SESSION['errors'])) {
 # Logic to help simplify logic in the display code
 # This code just determines what css class to add to each field
 $validation_state = [];
-foreach(['distance', 'hours', 'minutes', 'unit'] as $field) {
+foreach (['distance', 'hours', 'minutes', 'unit'] as $field) {
     if (isset($errors)) {
-        $validation_state[$field] = isset($errors[$field.'_error']) ? 'is-invalid' : 'is-valid';
+        $validation_state[$field] = isset($errors[$field . '_error']) ? 'is-invalid' : 'is-valid';
     }
 }
 

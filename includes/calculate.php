@@ -21,10 +21,10 @@ $MAX_HOURS = 90; # World record longest continuous run was 87 hours.
 # Validate all required params are set
 $required_fields = ['distance', 'hours', 'minutes', 'unit'];
 $errors = [];
-foreach($required_fields as $field) {
+foreach ($required_fields as $field) {
     if (!isset($_POST[$field])) {
-        $errors[$field.'_error'] = $field . ' is required.';
-    } 
+        $errors[$field . '_error'] = $field . ' is required.';
+    }
 }
 
 # Get data from form request
@@ -63,7 +63,7 @@ if ($distance <= 0) {
 }
 
 # If no errors then calculate the running pace
-if(count($errors) == 0) {
+if (count($errors) == 0) {
     $total_number_of_minutes = $hours * 60 + $minutes;
     $minutes_per_distance = $total_number_of_minutes / $distance;
     # Convert to time legible if greater than 60 minutes
@@ -95,7 +95,6 @@ $_SESSION['form'] = [
     'minutes_value' => $minutes,
     'unit_value' => $unit
 ];
-
 
 # Redirect back to the form on index.php
 header('Location: ../index.php');
