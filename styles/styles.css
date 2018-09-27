@@ -3,20 +3,8 @@ body {
     height: 100%;
 }
 
-body {
-    margin: 0;
-}
-
-div {
-    text-align: center;
-}
-
 form {
     width: 500px;
-}
-
-img {
-    max-width: 300px;
 }
 
 .flex-container {
@@ -26,4 +14,18 @@ img {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.unit-radio {
+    display: flex;
+    flex-flow: column;
+    align-items: baseline;
+    margin-top: 20px;
+}
+
+.jumbotron {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    text-align: center;
 }

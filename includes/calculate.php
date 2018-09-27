@@ -82,7 +82,7 @@ if (empty($errors)) {
     }
 
     # Convert greater than 60 minutes into hours for legibility
-    if ($minutes_per_distance > 60) {
+    if ($minutes_per_distance >= 60) {
         $hours_per_distance = (int)($minutes_per_distance / 60);
         $minutes_per_distance = $minutes_per_distance % 60;
     }
@@ -93,8 +93,10 @@ if (empty($errors)) {
         $hour_pluralize = $hours_per_distance == 1 ? 'hour' : 'hours';
         $result_string = $result_string . $hours_per_distance . ' ' . $hour_pluralize;
     }
-    $minutes_pluralize = $minutes_per_distance == 1 ? 'minute' : 'minutes';
-    $result_string = $result_string . ' ' . $minutes_per_distance . ' ' . $minutes_pluralize;
+    if($minutes_per_distance > 0) {
+        $minutes_pluralize = $minutes_per_distance == 1 ? 'minute' : 'minutes';
+        $result_string = $result_string . ' ' . $minutes_per_distance . ' ' . $minutes_pluralize;
+    }
     if (isset($seconds_per_distance)) {
         $second_pluralize = $seconds_per_distance == 1 ? 'second' : 'seconds';
         $result_string = $result_string . ' and ' . $seconds_per_distance . ' ' . $second_pluralize;

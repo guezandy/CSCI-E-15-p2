@@ -17,83 +17,89 @@ require 'includes/logic.php';
 </head>
 <body>
 <div class="flex-container">
-    <form method='GET' action='includes/calculate.php'>
-        <div class="mb-3">
-            <label for="distance">Enter distance</label>
-            <input name='distance'
-                   class="form-control <?= $validation_state['distance'] ?? '' ?>"
-                   type='number'
-                   value='<?= $distance_value ?? '' ?>'
-                   required>
-            <?php if (isset($errors)): ?>
-                <?php if (isset($errors['distance'])) : ?>
-                    <div class="invalid-feedback">
-                        <?= $errors['distance'] ?>
-                    </div>
-                <?php else: ?>
-                    <div class="valid-feedback">
-                        Looks good!
-                    </div>
-                <?php endif; ?>
-            <?php endif ?>
-        </div>
-        <div class="mb-3">
-            <label for="hours">Enter hours</label>
-            <input name='hours'
-                   class="form-control <?= $validation_state['hours'] ?? '' ?>"
-                   type='number'
-                   value='<?= $hours_value ?? '' ?>'
-                   required>
-            <?php if (isset($errors)): ?>
-                <?php if (isset($errors['hours'])) : ?>
-                    <div class="invalid-feedback">
-                        <?= $errors['hours'] ?>
-                    </div>
-                <?php else: ?>
-                    <div class="valid-feedback">
-                        Looks good!
-                    </div>
-                <?php endif; ?>
-            <?php endif ?>
-        </div>
-        <div class="mb-3">
-            <label for="minutes">Minutes (between 0 and 59)</label>
-            <input name='minutes'
-                   class="form-control <?= $validation_state['minutes'] ?? '' ?>"
-                   type='text'
-                   value='<?= $minutes_value ?? '' ?>'
-                   required>
-            <?php if (isset($errors)): ?>
-                <?php if (isset($errors['minutes'])) : ?>
-                    <div class="invalid-feedback">
-                        <?= $errors['minutes'] ?>
-                    </div>
-                <?php else: ?>
-                    <div class="valid-feedback">
-                        Looks good!
-                    </div>
-                <?php endif; ?>
-            <?php endif ?>
-        </div>
-        <div class="mb-3">
-            <label for="unit">Select Unit</label>
-            <select class="custom-select <?= $validation_state['unit'] ?? '' ?>" name='unit'>
-                <option value='mile' <?php if (isset($unit_value) && $unit_value == 'mile') : ?> selected <?php endif; ?>>Mile(s)</option>
-                <option value='kilometer' <?php if (isset($unit_value) && $unit_value == 'kilometer') : ?> selected <?php endif; ?>>Kilometer(s)</option>
-            </select>
-            <?php if (isset($errors)): ?>
-                <?php if (isset($errors['unit'])) : ?>
-                    <div class="invalid-feedback">
-                        <?= $errors['unit'] ?>
-                    </div>
-                <?php else: ?>
-                    <div class="valid-feedback">
-                        Looks good!
-                    </div>
-                <?php endif; ?>
-            <?php endif ?>
-        </div>
-        <input type='submit' value='Calculate' class='btn btn-primary mb-3'>
+    <div class="jumbotron">
+        <h1 class="display-4">Running pace calculator</h1>
+        <p>To calculate running pace enter distance you want to run and the goal time.</p>
+        <hr>
+        <form method='GET'
+              action='includes/calculate.php'>
+            <div class="mb-3 row">
+                <div class="col-sm-8">
+                    <label for="distance">Enter distance</label>
+                    <input name='distance'
+                           class="form-control <?= $validation_state['distance'] ?? '' ?>"
+                           type='number'
+                           value='<?= $distance_value ?? '' ?>'
+                           required>
+                    <?php if (isset($errors)): ?>
+                        <?php if (isset($errors['distance'])) : ?>
+                            <div class="invalid-feedback">
+                                <?= $errors['distance'] ?>
+                            </div>
+                        <?php else: ?>
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
+                        <?php endif; ?>
+                    <?php endif ?>
+                </div>
+                <div class="col-sm-3 col-sm-offset-1 unit-radio">
+                    <?php foreach (['mile', 'kilometer'] as $unit): ?>
+                        <div class="custom-control custom-radio">
+                            <input type="radio"
+                                   class="custom-control-input <?= $validation_state['unit'] ?? '' ?>"
+                                   id="<?= $unit ?>"
+                                   name="unit"
+                                   value="<?= $unit ?>"
+                                   required <?php if (isset($unit_value) && $unit_value == $unit) : ?> checked <?php endif; ?>>
+                            <label class="custom-control-label"
+                                   for="<?= $unit ?>"><?php if ($unit == 'mile'): ?> Mile(s) <?php else: ?> Kilometer(s) <?php endif; ?></label>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <div class="col-sm-6">
+                    <label for="hours">Hours</label>
+                    <input name='hours'
+                           class="form-control <?= $validation_state['hours'] ?? '' ?>"
+                           type='number'
+                           value='<?= $hours_value ?? '0' ?>'
+                           required>
+                    <?php if (isset($errors)): ?>
+                        <?php if (isset($errors['hours'])) : ?>
+                            <div class="invalid-feedback">
+                                <?= $errors['hours'] ?>
+                            </div>
+                        <?php else: ?>
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
+                        <?php endif; ?>
+                    <?php endif ?>
+                </div>
+                <div class="col-sm-6">
+                    <label for="minutes">Minutes</label>
+                    <select class="custom-select <?= $validation_state['minutes'] ?? '' ?>" name='minutes' required>
+                        <?php for ($i = 0; $i < 60; $i++): ?>
+                            <option value='<?= $i ?>' <?php if (isset($minutes_value) && $minutes_value == $i) : ?> selected <?php endif; ?>><?= $i ?></option>
+                        <?php endfor; ?>
+                    </select>
+                    <?php if (isset($errors)): ?>
+                        <?php if (isset($errors['minutes'])) : ?>
+                            <div class="invalid-feedback">
+                                <?= $errors['minutes'] ?>
+                            </div>
+                        <?php else: ?>
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
+                        <?php endif; ?>
+                    <?php endif ?>
+                </div>
+            </div>
+            <input type='submit' value='Calculate' class='btn btn-primary mb-3'>
+        </form>
         <?php if (isset($results)): ?>
             <div class="result">
                 <div class="alert alert-primary" role="alert">
@@ -102,7 +108,8 @@ require 'includes/logic.php';
                 </div>
             </div>
         <?php endif; ?>
-    </form>
+
+    </div>
 </div>
 </body>
 </html>
