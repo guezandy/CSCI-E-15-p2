@@ -14,15 +14,14 @@ if (isset($_SESSION['form'])) {
 
 if (isset($_SESSION['errors'])) {
     $errors = $_SESSION['errors'];
-    extract($errors);
 }
 
 # Logic to help simplify logic in the display code
-# This code just determines what css class to add to each field
+# This code just determines what css class to add to each field post validation
 $validation_state = [];
 foreach (['distance', 'hours', 'minutes', 'unit'] as $field) {
     if (isset($errors)) {
-        $validation_state[$field] = isset($errors[$field . '_error']) ? 'is-invalid' : 'is-valid';
+        $validation_state[$field] = isset($errors[$field]) ? 'is-invalid' : 'is-valid';
     }
 }
 

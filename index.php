@@ -26,9 +26,9 @@ require 'includes/logic.php';
                    value='<?= $distance_value ?? '' ?>'
                    required>
             <?php if (isset($errors)): ?>
-                <?php if (isset($distance_error)) : ?>
+                <?php if (isset($errors['distance'])) : ?>
                     <div class="invalid-feedback">
-                        <?= $distance_error ?>
+                        <?= $errors['distance'] ?>
                     </div>
                 <?php else: ?>
                     <div class="valid-feedback">
@@ -45,9 +45,9 @@ require 'includes/logic.php';
                    value='<?= $hours_value ?? '' ?>'
                    required>
             <?php if (isset($errors)): ?>
-                <?php if (isset($hours_error)) : ?>
+                <?php if (isset($errors['hours'])) : ?>
                     <div class="invalid-feedback">
-                        <?= $hours_error ?>
+                        <?= $errors['hours'] ?>
                     </div>
                 <?php else: ?>
                     <div class="valid-feedback">
@@ -60,13 +60,13 @@ require 'includes/logic.php';
             <label for="minutes">Minutes (between 0 and 59)</label>
             <input name='minutes'
                    class="form-control <?= $validation_state['minutes'] ?? '' ?>"
-                   type='number'
+                   type='text'
                    value='<?= $minutes_value ?? '' ?>'
                    required>
             <?php if (isset($errors)): ?>
-                <?php if (isset($minutes_error)) : ?>
+                <?php if (isset($errors['minutes'])) : ?>
                     <div class="invalid-feedback">
-                        <?= $minutes_error ?>
+                        <?= $errors['minutes'] ?>
                     </div>
                 <?php else: ?>
                     <div class="valid-feedback">
@@ -82,9 +82,9 @@ require 'includes/logic.php';
                 <option value='kilometer' <?php if (isset($unit_value) && $unit_value == 'kilometer') : ?> selected <?php endif; ?>>Kilometer(s)</option>
             </select>
             <?php if (isset($errors)): ?>
-                <?php if (isset($unit_error)) : ?>
+                <?php if (isset($errors['unit'])) : ?>
                     <div class="invalid-feedback">
-                        <?= $unit_error ?>
+                        <?= $errors['unit'] ?>
                     </div>
                 <?php else: ?>
                     <div class="valid-feedback">

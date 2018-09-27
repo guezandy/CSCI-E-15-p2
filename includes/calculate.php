@@ -3,70 +3,85 @@
  * This is the script that the form on index.php submits to
  * Its job is to:
  * 1. Get the data from the form request
- * 2. Validate all required fields are present
- * 3. Validate all fields are within acceptable contraints
+ * 2. Validate all required fields Form validators
+ * 3. Validate inputs using additional validators
  * 4. Calculate the pace needed to run
  * 5. Store the results, errors and form data in the SESSION
- * 4. Redirect the visitor back to index.php
+ * 6. Redirect the visitor back to index.php
  */
 
-# We'll be storing data in the session, so initiate it
-session_start();
+require 'helpers.php';
+require 'Form.php';
+
+use DWA\Form;
 
 # Constants
 $MAX_DISTANCE_MILES = 350; # Max miles runnable by a human
 $MAX_DISTANCE_KILOMETERS = $MAX_DISTANCE_MILES * 1.6; # Max kilometers runnable by a human
 $MAX_HOURS = 90; # World record longest continuous run was 87 hours.
 
-# Validate all required params are set
-$required_fields = ['distance', 'hours', 'minutes', 'unit'];
+# We'll be storing data in the session, so initiate it
+session_start();
+
+# Initialize form handler
+$form = new Form($_POST);
+
+# Use form validator as much as possible
+$validators = [
+    'distance' => 'required|numeric|min:0.01',
+    'hours' => 'required|digit|min:0|max:' . $MAX_HOURS,
+    'minutes' => 'required|digit|min:0|max:59',
+    'unit' => 'required'
+];
+
 $errors = [];
-foreach ($required_fields as $field) {
-    if (!isset($_POST[$field])) {
-        $errors[$field . '_error'] = $field . ' is required.';
+# Split each validator into separate fields to know which field has an error
+foreach ($validators as $field => $criteria) {
+    $field_errors = $form->validate([
+        $field => $criteria
+    ]);
+    if (!empty($field_errors)) {
+        # Only take the first error - since we can only show 1 error in this UI as it is.
+        $errors[$field] = $field_errors[0];
     }
 }
 
-# Get data from form request
+# Other validators not defined in Form
 $hours = (float)($_POST['hours']);
 $minutes = (float)($_POST['minutes']);
 $distance = (float)($_POST['distance']);
 $unit = $_POST['unit'];
 
-# Validate parameters are correct
-if ($hours < 0) {
-    $errors['hours_error'] = 'Must be greater than 0';
-} else if ($hours > $MAX_HOURS) {
-    $errors['hours_error'] = 'Not humanly possible - yet.';
-}
-
-if ($minutes < 0 || $minutes >= 60) {
-    $errors['minutes_error'] = 'Invalid value of minutes';
-}
-
 # Either minutes or hours must contain a value
 if ($minutes == 0 && $hours == 0) {
-    $errors['hours_error'] = 'Either minutes or hours must be greater than 0';
-    $errors['minutes_error'] = 'Either minutes or hours must be greater than 0';
+    $errors['hours'] = 'Either minutes or hours must be greater than 0';
+    $errors['minutes'] = 'Either minutes or hours must be greater than 0';
 }
 
+# Unit must be a valid value - just in case anyone modifies the DOM
 if (!in_array($unit, ['mile', 'kilometer'])) {
-    $errors['unit_error'] = 'Invalid distance unit';
+    $errors['unit'] = 'Invalid distance unit - must be mile or kilometer';
 }
 
 $max_distance = $unit == 'mile' ? $MAX_DISTANCE_MILES : $MAX_DISTANCE_KILOMETERS;
-
-if ($distance <= 0) {
-    $errors['distance_error'] = 'Invalid number of ' . $unit;
-} else if ($distance > $max_distance) {
-    $errors['distance_error'] = $distance . ' ' . $units . ' is not humanly possible - yet.';
+if ($distance > $max_distance) {
+    $errors['distance'] = $distance . ' ' . $unit . 's is not humanly possible - yet.';
 }
 
 # If no errors then calculate the running pace
-if (count($errors) == 0) {
+if (empty($errors)) {
     $total_number_of_minutes = $hours * 60 + $minutes;
     $minutes_per_distance = $total_number_of_minutes / $distance;
-    # Convert to time legible if greater than 60 minutes
+
+    # Convert fractional minutes into seconds for legibility
+    $fractional_seconds = $minutes_per_distance - (int)$minutes_per_distance;
+    if ($fractional_seconds > 0) {
+        # Converting to int cause not really interested in fractions of seconds
+        $seconds_per_distance = (int)(60 * $fractional_seconds);
+        $minutes_per_distance = (int)$minutes_per_distance;
+    }
+
+    # Convert greater than 60 minutes into hours for legibility
     if ($minutes_per_distance > 60) {
         $hours_per_distance = (int)($minutes_per_distance / 60);
         $minutes_per_distance = $minutes_per_distance % 60;
@@ -79,7 +94,12 @@ if (count($errors) == 0) {
         $result_string = $result_string . $hours_per_distance . ' ' . $hour_pluralize;
     }
     $minutes_pluralize = $minutes_per_distance == 1 ? 'minute' : 'minutes';
-    $result_string = $result_string . ' ' . $minutes_per_distance . ' ' . $minutes_pluralize . ' per ' . $unit;
+    $result_string = $result_string . ' ' . $minutes_per_distance . ' ' . $minutes_pluralize;
+    if (isset($seconds_per_distance)) {
+        $second_pluralize = $seconds_per_distance == 1 ? 'second' : 'seconds';
+        $result_string = $result_string . ' and ' . $seconds_per_distance . ' ' . $second_pluralize;
+    }
+    $result_string = $result_string . ' per ' . $unit;
 
     # Store results in SESSION
     $_SESSION['results'] = $result_string;
