@@ -17,7 +17,7 @@ if (isset($_SESSION['errors'])) {
 }
 
 # Logic to help simplify logic in the display code
-# This code just determines what css class to add to each field post validation
+# This code just determines what css class to add to each field after validation
 $validation_state = [];
 foreach (['distance', 'hours', 'minutes', 'unit'] as $field) {
     if (isset($errors)) {

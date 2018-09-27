@@ -24,7 +24,7 @@ $MAX_HOURS = 90; # World record longest continuous run was 87 hours.
 session_start();
 
 # Initialize form handler
-$form = new Form($_POST);
+$form = new Form($_GET);
 
 # Use form validator as much as possible
 $validators = [
@@ -47,10 +47,10 @@ foreach ($validators as $field => $criteria) {
 }
 
 # Other validators not defined in Form
-$hours = (float)($_POST['hours']);
-$minutes = (float)($_POST['minutes']);
-$distance = (float)($_POST['distance']);
-$unit = $_POST['unit'];
+$hours = (float) $form->get('hours');
+$minutes = (float) $form->get('minutes');
+$distance = (float) $form->get('distance');
+$unit = $form->get('unit');
 
 # Either minutes or hours must contain a value
 if ($minutes == 0 && $hours == 0) {

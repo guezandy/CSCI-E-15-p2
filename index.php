@@ -17,7 +17,7 @@ require 'includes/logic.php';
 </head>
 <body>
 <div class="flex-container">
-    <form method='POST' action='includes/calculate.php'>
+    <form method='GET' action='includes/calculate.php'>
         <div class="mb-3">
             <label for="distance">Enter distance</label>
             <input name='distance'
