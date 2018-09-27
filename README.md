@@ -1,6 +1,6 @@
 # Pace Math
 + By: Andrew Rodriguez
-+ Production URL: <http://p2.squareinches.com>
++ Production URL: <https://p2.squareinches.com>
 
 ## Outside resources
 + Styling via [Bootstrap CDN](https://www.bootstrapcdn.com)
