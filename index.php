@@ -27,6 +27,7 @@ require 'includes/logic.php';
                 <div class="col-sm-8">
                     <label for="distance">Enter distance</label>
                     <input name='distance'
+                           id='distance'
                            class="form-control <?= $validation_state['distance'] ?? '' ?>"
                            type='number'
                            value='<?= $distance_value ?? '' ?>'
@@ -62,6 +63,7 @@ require 'includes/logic.php';
                 <div class="col-sm-6">
                     <label for="hours">Hours</label>
                     <input name='hours'
+                           id='hours'
                            class="form-control <?= $validation_state['hours'] ?? '' ?>"
                            type='number'
                            value='<?= $hours_value ?? '0' ?>'
@@ -80,7 +82,7 @@ require 'includes/logic.php';
                 </div>
                 <div class="col-sm-6">
                     <label for="minutes">Minutes</label>
-                    <select class="custom-select <?= $validation_state['minutes'] ?? '' ?>" name='minutes' required>
+                    <select class="custom-select <?= $validation_state['minutes'] ?? '' ?>" id='minutes' name='minutes' required>
                         <?php for ($i = 0; $i < 60; $i++): ?>
                             <option value='<?= $i ?>' <?php if (isset($minutes_value) && $minutes_value == $i) : ?> selected <?php endif; ?>><?= $i ?></option>
                         <?php endfor; ?>
