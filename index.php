@@ -82,7 +82,7 @@ require 'includes/logic.php';
                 </div>
                 <div class="col-sm-6">
                     <label for="minutes">Minutes</label>
-                    <select class="custom-select <?= $validation_state['minutes'] ?? '' ?>" id='minutes' name='minutes' required>
+                    <select class="custom-select <?= $validation_state['minutes'] ?? '' ?>" id='minutes' name='minutes'>
                         <?php for ($i = 0; $i < 60; $i++): ?>
                             <option value='<?= $i ?>' <?php if (isset($minutes_value) && $minutes_value == $i) : ?> selected <?php endif; ?>><?= $i ?></option>
                         <?php endfor; ?>
